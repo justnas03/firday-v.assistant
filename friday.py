@@ -7,7 +7,7 @@ import os
 
 Friday = pyttsx3.init() # Initialize the pyttsx3 engine
 voices = Friday.getProperty('voices') # Get the available voices
-Friday.setProperty('voice', voices[1].id) # Set the voice to the second voice in the list voices[0], voices[1]
+Friday.setProperty('voice', voices[0].id) # Set the voice to the second voice in the list voices[0], voices[1]
 
 
 def speak(audio):
@@ -34,24 +34,29 @@ def welcome():
 def command():
     c = sr.Recognizer() # Initialize the recognizer help to recognize the speech
     with sr.Microphone() as source: # Use the microphone as the source
-        print("Listening...") 
-        c.pause_threshold = 1 # The pause threshold is the time the recognizer will wait for the user to finish speaking before processing the audio
-        c.adjust_for_ambient_noise(source, duration=1)
+        c.pause_threshold = 2
+        c.adjust_for_ambient_noise(source)
+        print("Listening...")
         audio = c.listen(source) # Listen to the audio
         try:
-            query = c.recognize_google(audio, language='en-in') # Recognize the speech using Google Web Speech API
+            query = c.recognize_google(audio, language='en') # Recognize the speech using Google Web Speech API
             print(name +" said: ", query)
-            return query
         except sr.UnknownValueError:
             print("I cant hear you clearly.")
-            query = input("Your order is: ")
-            return query
+            query = str(input("Your order is: "))
+    return query
+        
 
 if __name__ == "__main__":
     welcome()
     while True:
             query = command().lower()
-            if "google" in query:
+
+            if "what can you do" in query:
+                speak("I can Google Search, Youtube Search, Show what time is it.")
+                speak("I'll learn more.")
+
+            elif "google" in query:
                 speak("What should I search for?")
                 search = command().lower()
                 url = f"https://www.google.com/search?q={search}"
@@ -72,10 +77,14 @@ if __name__ == "__main__":
             
             elif "quit" in query or "exit" in query:
                 speak("Friday will miss you !")
-                break
-            
+                quit()
+
+            elif "time" in query:
+                time()
+
             else:
                 speak("I cant do that.")
+            
 
 
 
