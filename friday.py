@@ -45,12 +45,15 @@ def command():
             print("I cant hear you clearly.")
             query = str(input("Your order is: "))
     return query
-        
+
+def command_type():
+    query = input("You: ")
+    return query        
 
 if __name__ == "__main__":
     welcome()
     while True:
-            query = command().lower()
+            query = command_type().lower()
 
             if "what can you do" in query:
                 speak("I can Google Search, Youtube Search, Show what time is it.")
@@ -58,14 +61,14 @@ if __name__ == "__main__":
 
             elif "google" in query:
                 speak("What should I search for?")
-                search = command().lower()
+                search = command_type().lower()
                 url = f"https://www.google.com/search?q={search}"
                 wb.get().open(url)
                 speak(f"Here is your {search} on Google")
 
             elif "youtube" in query:
                 speak("What should I search for?")
-                search = command().lower()
+                search = command_type().lower()
                 url = f"https://www.youtube.com/search?q={search}"
                 wb.get().open(url)
                 speak(f"Here is your {search} on Youtube")
